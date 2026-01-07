@@ -1,12 +1,32 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter, usePathname } from "next/navigation"
 import { Search, Menu, X } from "lucide-react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const handleHashLink = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
+    e.preventDefault()
+
+    if (pathname === "/") {
+      // Already on home page, just scroll
+      const element = document.getElementById(hash)
+      element?.scrollIntoView({ behavior: "smooth" })
+    } else {
+      // Navigate to home then scroll
+      router.push("/")
+      setTimeout(() => {
+        const element = document.getElementById(hash)
+        element?.scrollIntoView({ behavior: "smooth" })
+      }, 100)
+    }
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full">
@@ -33,15 +53,16 @@ export function Header() {
             >
               Les 50 points
             </Link>
-            <Link
+            <a
               href="/#faq"
-              className="px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50"
+              onClick={(e) => handleHashLink(e, "faq")}
+              className="px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50 cursor-pointer"
             >
               FAQ
-            </Link>
+            </a>
             <div className="w-px h-6 bg-border mx-2" />
             <Button size="sm" className="ml-2 glow-sm hover:glow-md transition-all" asChild>
-              <Link href="/#hero">Lancer un audit</Link>
+              <a href="/#hero" onClick={(e) => handleHashLink(e, "hero")}>Lancer un audit</a>
             </Button>
           </nav>
 
@@ -69,16 +90,16 @@ export function Header() {
               >
                 Les 50 points
               </Link>
-              <Link
+              <a
                 href="/#faq"
-                className="px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50"
-                onClick={() => setMobileMenuOpen(false)}
+                className="px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground rounded-lg hover:bg-secondary/50 cursor-pointer"
+                onClick={(e) => { handleHashLink(e, "faq"); setMobileMenuOpen(false) }}
               >
                 FAQ
-              </Link>
+              </a>
               <div className="h-px bg-border my-2" />
               <Button className="w-full" onClick={() => setMobileMenuOpen(false)} asChild>
-                <Link href="/#hero">Lancer un audit</Link>
+                <a href="/#hero" onClick={(e) => { handleHashLink(e, "hero"); setMobileMenuOpen(false) }}>Lancer un audit</a>
               </Button>
             </nav>
           </div>
