@@ -8,11 +8,6 @@ const footerLinks = {
     { label: 'Lancer un audit', href: '/#hero' },
     { label: 'FAQ', href: '/#faq' },
   ],
-  legal: [
-    { label: 'Mentions légales', href: '/mentions-legales' },
-    { label: 'Confidentialité', href: '/confidentialite' },
-    { label: 'CGU', href: '/cgu' },
-  ],
 }
 
 export function Footer() {
@@ -69,21 +64,6 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
-            <h3 className="font-semibold mb-4">Légal</h3>
-            <ul className="space-y-3">
-              {footerLinks.legal.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
 
         {/* Bottom bar */}
