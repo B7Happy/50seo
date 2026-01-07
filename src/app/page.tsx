@@ -1,8 +1,8 @@
 import { getAuditStats } from "@/lib/actions/stats"
 import { V2PageClient } from "./v2/client"
 
-// Revalidate every 5 minutes to show fresh stats
-export const revalidate = 300
+// Force dynamic rendering for fresh stats
+export const dynamic = "force-dynamic"
 
 export default async function Home() {
   const stats = await getAuditStats()

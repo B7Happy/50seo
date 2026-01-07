@@ -122,15 +122,18 @@ function HeroSection({ stats }: { stats: Stats }) {
       <div className="container relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge with real stats */}
-          {stats.weeklyCount > 0 && (
-            <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full border border-primary/30 bg-primary/5 text-sm text-primary font-medium reveal">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-              </span>
-              +{formatNumber(stats.weeklyCount)} sites analysés cette semaine
-            </div>
-          )}
+          <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full border border-primary/30 bg-primary/5 text-sm text-primary font-medium reveal">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
+            {stats.weeklyCount > 0
+              ? `+${formatNumber(stats.weeklyCount)} sites analysés cette semaine`
+              : stats.totalCount > 0
+                ? `${formatNumber(stats.totalCount)} sites déjà analysés`
+                : "Audit SEO technique gratuit"
+            }
+          </div>
 
           {/* Title */}
           <h1 className="mb-8 reveal stagger-1">
