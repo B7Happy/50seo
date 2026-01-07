@@ -46,7 +46,7 @@ export function Footer() {
               className="group inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-secondary/30 hover:bg-secondary/50 hover:border-primary/30 transition-all"
             >
               <span className="text-sm">
-                Découvrir l'audit <span className="font-semibold text-primary">GEO</span>
+                Découvrir l'audit <span className="font-semibold text-primary">SEO AI</span>
               </span>
               <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
             </a>
