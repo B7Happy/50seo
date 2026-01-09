@@ -335,7 +335,7 @@ export default function ChecklistPage() {
                 </Button>
                 <Button asChild variant="outline" size="lg">
                   <a
-                    href={`https://cal.com/${siteConfig.calLink}`}
+                    href={siteConfig.calLink}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

@@ -49,7 +49,7 @@ export function CTASearchXLab({ className }: CTASearchXLabProps) {
             className="shrink-0 gap-2 group glow-sm hover:glow-md transition-all"
           >
             <a
-              href={`https://cal.com/${siteConfig.calLink}`}
+              href={siteConfig.calLink}
               target="_blank"
               rel="noopener noreferrer"
             >

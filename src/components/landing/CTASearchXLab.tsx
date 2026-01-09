@@ -66,7 +66,7 @@ export function CTASearchXLab() {
                   {/* CTA */}
                   <Button asChild size="lg" className="group gap-2 glow-sm hover:glow-md transition-all duration-300">
                     <a
-                      href={`https://cal.com/${siteConfig.calLink}`}
+                      href={siteConfig.calLink}
                       target="_blank"
                       rel="noopener noreferrer"
                     >

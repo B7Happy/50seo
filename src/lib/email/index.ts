@@ -132,7 +132,7 @@ export async function sendAuditReport({
                     <p style="margin: 0 0 16px 0; font-size: 13px; color: #6366F1;">
                       Decouvrez si ChatGPT et Perplexity mentionnent votre marque
                     </p>
-                    <a href="https://cal.com/${siteConfig.calLink}" style="display: inline-block; background-color: #4F46E5; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-size: 13px; font-weight: 600;">
+                    <a href="${siteConfig.calLink}" style="display: inline-block; background-color: #4F46E5; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-size: 13px; font-weight: 600;">
                       Reserver un appel gratuit
                     </a>
                   </td>
