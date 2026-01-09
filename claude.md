@@ -3,15 +3,19 @@
 ## Overview
 50SEO.fr is an automated SEO audit tool that analyzes websites on 50 technical SEO points and generates a score with recommendations. It's a lead generation tool for SearchXLab.
 
+## Repository
+- **GitHub:** git@github.com:B7Happy/50seo.git
+- **Branch:** main
+
 ## Tech Stack
 - **Framework:** Next.js 16 (App Router)
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS v4 + shadcn/ui (dark theme)
 - **Database:** Supabase (PostgreSQL) + Drizzle ORM
 - **Scraping:** Browserless.io (headless Chrome) + Cheerio
-- **Email:** Resend
+- **Email:** Resend (from: rapport50@searchxlab.com)
 - **PDF:** @react-pdf/renderer
-- **Animations:** tw-animate-css
+- **Animations:** Framer Motion + tw-animate-css
 - **Hosting:** Vercel
 
 ## Fonts
@@ -31,6 +35,7 @@ src/
 │   └── api/
 │       ├── audit/route.ts          # POST: start audit
 │       ├── audit/[id]/route.ts     # GET: get results
+│       ├── email/[id]/route.ts     # POST: send email report
 │       └── pdf/[id]/route.ts       # GET: generate PDF
 ├── components/
 │   ├── ui/                         # shadcn/ui components
@@ -113,13 +118,24 @@ npm run db:studio    # Open Drizzle Studio
 7. ✅ Phase 7: PDF & Email
 8. ✅ Phase 8: Checklist Page
 9. ✅ Phase 9: SEO & Polish
-10. Phase 10: Deployment
+10. ✅ Phase 10: Deployment
+
+## Environment Variables
+Required in `.env.local`:
+```
+DATABASE_URL=           # Supabase PostgreSQL connection string
+BROWSERLESS_TOKEN=      # Browserless.io API token
+RESEND_API_KEY=         # Resend email API key
+NEXT_PUBLIC_SITE_URL=   # Production URL (https://50seo.fr)
+```
 
 ## Important Notes
 - Site is dark-themed by default (html has `dark` class)
 - Use `font-display` class for headings
-- Footer must include "Propulse par SearchXLab"
+- Footer must include "Propulsé par SearchXLab"
 - CTA redirects to SearchXLab for GEO audit
 - Use shadcn/ui components (sonner for toasts)
-- Rate limit /api/audit (2 audits/IP/hour)
+- Rate limit /api/audit (200 audits/IP/hour)
 - Limit broken links check to 50 internal links max
+- Email reports sent from rapport50@searchxlab.com
+- Database uses shared connection with `prepare: false` and `ssl: 'require'` for Supabase Transaction pooler compatibility

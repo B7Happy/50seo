@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { eq } from 'drizzle-orm';
 import { renderToBuffer } from '@react-pdf/renderer';
 import { db, audits } from '@/lib/db';
+import { eq } from 'drizzle-orm';
 import { AuditPDF } from '@/lib/pdf/generator';
 import type { AuditCategory } from '@/types/audit';
 
@@ -33,9 +33,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     // Fetch audit from database
-    const audit = await db.query.audits.findFirst({
-      where: eq(audits.id, id),
-    });
+    const dbResults = await db.select().from(audits).where(eq(audits.id, id)).limit(1);
+    const audit = dbResults[0] || null;
 
     if (!audit) {
       return NextResponse.json(
@@ -58,7 +57,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    const results = audit.results as AuditResults;
+    const auditResults = audit.results as AuditResults;
 
     // Generate PDF
     const pdfBuffer = await renderToBuffer(
@@ -67,8 +66,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         domain: audit.domain,
         url: audit.url,
         score: audit.score || 0,
-        summary: results.summary,
-        categories: results.categories,
+        summary: auditResults.summary,
+        categories: auditResults.categories,
         createdAt: audit.createdAt,
       })
     );

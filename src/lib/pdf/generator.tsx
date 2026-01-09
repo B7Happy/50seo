@@ -5,29 +5,30 @@ import {
   Text,
   View,
   StyleSheet,
-  Font,
   Link,
 } from '@react-pdf/renderer';
 import type { AuditCategory, CheckResult, CheckStatus } from '@/types/audit';
 
-// Register fonts
-Font.register({
-  family: 'Inter',
-  fonts: [
-    {
-      src: 'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2',
-      fontWeight: 400,
-    },
-    {
-      src: 'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiJ-Ek-_EeA.woff2',
-      fontWeight: 600,
-    },
-    {
-      src: 'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYAZ9hiJ-Ek-_EeA.woff2',
-      fontWeight: 700,
-    },
-  ],
-});
+// Use built-in Helvetica font (woff2 fonts cause DataView errors)
+
+// Sanitize text to remove problematic characters for PDF rendering
+const sanitizeText = (text: string | undefined | null): string => {
+  if (!text) return '';
+  // Remove emojis and other problematic Unicode characters
+  return text
+    .replace(/[\u{1F600}-\u{1F64F}]/gu, '') // Emoticons
+    .replace(/[\u{1F300}-\u{1F5FF}]/gu, '') // Misc Symbols and Pictographs
+    .replace(/[\u{1F680}-\u{1F6FF}]/gu, '') // Transport and Map
+    .replace(/[\u{1F1E0}-\u{1F1FF}]/gu, '') // Flags
+    .replace(/[\u{2600}-\u{26FF}]/gu, '')   // Misc symbols
+    .replace(/[\u{2700}-\u{27BF}]/gu, '')   // Dingbats
+    .replace(/[\u{FE00}-\u{FE0F}]/gu, '')   // Variation Selectors
+    .replace(/[\u{1F900}-\u{1F9FF}]/gu, '') // Supplemental Symbols
+    .replace(/[\u{1FA00}-\u{1FA6F}]/gu, '') // Chess Symbols
+    .replace(/[\u{1FA70}-\u{1FAFF}]/gu, '') // Symbols and Pictographs Extended-A
+    .replace(/[\u2192\u2190\u2191\u2193\u2194\u2195]/g, '->') // Arrows
+    .replace(/[^\x00-\x7F\u00C0-\u00FF\u0100-\u017F]/g, ''); // Keep only ASCII + Latin Extended
+};
 
 // Colors
 const colors = {
@@ -45,7 +46,7 @@ const colors = {
 // Styles
 const styles = StyleSheet.create({
   page: {
-    fontFamily: 'Inter',
+    fontFamily: 'Helvetica',
     fontSize: 10,
     paddingTop: 40,
     paddingBottom: 60,
@@ -266,15 +267,15 @@ const getStatusColor = (status: CheckStatus): string => {
   }
 };
 
-// Helper to get status symbol
+// Helper to get status symbol (using ASCII for PDF compatibility)
 const getStatusSymbol = (status: CheckStatus): string => {
   switch (status) {
     case 'pass':
-      return '✓';
+      return 'OK';
     case 'warning':
       return '!';
     case 'fail':
-      return '✗';
+      return 'X';
     case 'manual':
       return '?';
     default:
@@ -289,6 +290,23 @@ const getScoreColor = (score: number): string => {
   return colors.destructive;
 };
 
+// Map category IDs to text-based icons (emojis don't work in react-pdf)
+const getCategoryIcon = (categoryId: string): string => {
+  const iconMap: Record<string, string> = {
+    international: '[i18n]',
+    technical: '[tech]',
+    content: '[txt]',
+    schema: '[data]',
+    media: '[img]',
+    performance: '[perf]',
+    javascript: '[js]',
+    navigation: '[nav]',
+    analysis: '[log]',
+    errors: '[err]',
+  };
+  return iconMap[categoryId] || '[?]';
+};
+
 // Check Item Component
 const CheckItemView = ({ check }: { check: CheckResult }) => (
   <View style={styles.checkItem} wrap={false}>
@@ -297,12 +315,12 @@ const CheckItemView = ({ check }: { check: CheckResult }) => (
     </View>
     <View style={styles.checkContent}>
       <Text style={styles.checkName}>
-        #{check.id} - {check.name}
+        #{check.id} - {sanitizeText(check.name)}
       </Text>
-      <Text style={styles.checkMessage}>{check.message}</Text>
+      <Text style={styles.checkMessage}>{sanitizeText(check.message)}</Text>
       {check.recommendation && check.status !== 'pass' && (
         <Text style={styles.checkRecommendation}>
-          Recommandation: {check.recommendation}
+          Recommandation: {sanitizeText(check.recommendation)}
         </Text>
       )}
     </View>
@@ -313,8 +331,8 @@ const CheckItemView = ({ check }: { check: CheckResult }) => (
 const CategorySection = ({ category }: { category: AuditCategory }) => (
   <View style={styles.categorySection} wrap={false}>
     <View style={styles.categoryHeader}>
-      <Text style={styles.categoryIcon}>{category.icon}</Text>
-      <Text style={styles.categoryName}>{category.name}</Text>
+      <Text style={styles.categoryIcon}>{getCategoryIcon(category.id)}</Text>
+      <Text style={styles.categoryName}>{sanitizeText(category.name)}</Text>
       <Text style={styles.categoryScore}>
         {category.score}/{category.maxScore}
       </Text>
@@ -363,15 +381,15 @@ export function AuditPDF({
         <View style={styles.header}>
           <Text style={styles.logo}>50SEO</Text>
           <View style={styles.headerRight}>
-            <Text style={styles.domain}>{domain}</Text>
+            <Text style={styles.domain}>{sanitizeText(domain)}</Text>
             <Text style={styles.date}>Analyse du {formattedDate}</Text>
           </View>
         </View>
 
         {/* Title */}
-        <Text style={styles.title}>Rapport d'Audit SEO Technique</Text>
+        <Text style={styles.title}>Rapport d Audit SEO Technique</Text>
         <Text style={styles.subtitle}>
-          Analyse complete de {url} sur 50 points SEO
+          Analyse complete de {sanitizeText(url)} sur 50 points SEO
         </Text>
 
         {/* Score Section */}
@@ -429,7 +447,7 @@ export function AuditPDF({
             votre visibilite sur les moteurs IA comme ChatGPT et Perplexity.
           </Text>
           <Link src="https://www.searchxlab.com" style={styles.ctaLink}>
-            Decouvrir SearchXLab →
+            Decouvrir SearchXLab
           </Link>
         </View>
 
