@@ -8,8 +8,8 @@ interface RateLimitEntry {
 
 const rateLimitMap = new Map<string, RateLimitEntry>();
 
-const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour in ms
-const MAX_REQUESTS = 200; // 200 audits per IP per hour
+const RATE_LIMIT_WINDOW = 24 * 60 * 60 * 1000; // 24 hours in ms
+const MAX_REQUESTS = 3; // 3 audits per IP per day
 
 export function checkRateLimit(identifier: string): { allowed: boolean; remaining: number; resetAt: number } {
   const now = Date.now();

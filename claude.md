@@ -135,7 +135,7 @@ NEXT_PUBLIC_SITE_URL=   # Production URL (https://50seo.fr)
 - Footer must include "Propulsé par SearchXLab"
 - CTA redirects to SearchXLab for GEO audit
 - Use shadcn/ui components (sonner for toasts)
-- Rate limit /api/audit (200 audits/IP/hour)
+- Rate limit /api/audit (3 audits/IP/day)
 - Limit broken links check to 50 internal links max
 - Email reports sent from rapport50@searchxlab.com
 - Database uses shared connection with `prepare: false` and `ssl: 'require'` for Supabase Transaction pooler compatibility

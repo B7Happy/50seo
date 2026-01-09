@@ -38,8 +38,8 @@ export async function POST(request: NextRequest) {
     if (!rateLimit.allowed) {
       return NextResponse.json(
         {
-          error: 'Trop de requêtes',
-          message: 'Vous avez atteint la limite de 2 audits par heure. Réessayez plus tard.',
+          error: 'Limite atteinte',
+          message: 'Vous avez atteint la limite de 3 audits par jour. Revenez demain !',
           resetAt: new Date(rateLimit.resetAt).toISOString(),
         },
         {
