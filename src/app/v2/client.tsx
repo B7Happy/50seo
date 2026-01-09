@@ -127,11 +127,9 @@ function HeroSection({ stats }: { stats: Stats }) {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
-            {stats.weeklyCount > 0
-              ? `+${formatNumber(stats.weeklyCount)} sites analysés cette semaine`
-              : stats.totalCount > 0
-                ? `${formatNumber(stats.totalCount)} sites déjà analysés`
-                : "Audit SEO technique gratuit"
+            {stats.totalCount > 0
+              ? `+${formatNumber(stats.totalCount)} sites analysés au total`
+              : "Audit SEO technique gratuit"
             }
           </div>
 
